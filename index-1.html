@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zerofx Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#03080f; --bg2:#060d1a;
+  --blue:#0ea5e9; --blue-bright:#38bdf8; --blue-deep:#0369a1;
+  --cyan:#06b6d4; --glass:rgba(14,165,233,0.06);
+  --glass-border:rgba(56,189,248,0.18);
+  --text:#e0f2fe; --text-muted:#7eb8d4;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+.orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0;animation:floatOrb 9s ease-in-out infinite;}
+.orb-1{width:550px;height:550px;background:rgba(14,165,233,0.22);top:-120px;right:-80px;}
+.orb-2{width:420px;height:420px;background:rgba(6,182,212,0.15);bottom:15%;left:-100px;animation-delay:3s;}
+.orb-3{width:300px;height:300px;background:rgba(56,189,248,0.1);top:45%;right:5%;animation-delay:1.5s;}
+@keyframes floatOrb{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
+
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(14,165,233,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,0.05) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black 20%,transparent 100%);pointer-events:none;z-index:0;}
+
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1.1rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(3,8,15,0.85);backdrop-filter:blur(22px);border-bottom:1px solid var(--glass-border);}
+.logo{font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--blue-bright),var(--cyan),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;filter:drop-shadow(0 0 12px rgba(56,189,248,0.6));}
+.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center;}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.88rem;font-weight:600;letter-spacing:1px;transition:color 0.3s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--blue-bright),var(--cyan));transition:width 0.3s;}
+.nav-links a:hover{color:var(--blue-bright);}
+.nav-links a:hover::after{width:100%;}
+.nav-discord{padding:0.5rem 1.2rem;background:linear-gradient(135deg,#3730a3,#5865F2);border-radius:8px;color:white!important;font-weight:700!important;transition:all 0.3s!important;}
+.nav-discord::after{display:none!important;}
+.nav-discord:hover{box-shadow:0 0 20px rgba(88,101,242,0.5);transform:translateY(-2px);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:9rem 2rem 5rem;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.6rem;padding:0.45rem 1.4rem;background:rgba(14,165,233,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:50px;font-size:0.78rem;color:var(--blue-bright);letter-spacing:2px;text-transform:uppercase;margin-bottom:2rem;backdrop-filter:blur(10px);}
+.dot{width:7px;height:7px;background:#22d3ee;border-radius:50%;box-shadow:0 0 8px #22d3ee;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.7)}}
+.hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(3.8rem,11vw,7.5rem);font-weight:900;line-height:1;background:linear-gradient(135deg,#fff 0%,var(--blue-bright) 45%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 50px rgba(14,165,233,0.5));}
+.hero-sub{font-family:'Orbitron',sans-serif;font-size:clamp(0.75rem,1.8vw,1rem);color:var(--text-muted);letter-spacing:5px;text-transform:uppercase;margin:0.8rem 0 1.5rem;}
+.hero-desc{max-width:520px;color:var(--text-muted);font-size:1rem;line-height:1.85;margin-bottom:2.5rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+.btn-primary{padding:0.9rem 2.3rem;background:linear-gradient(135deg,var(--blue-deep),var(--blue));border:none;border-radius:12px;color:white;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.3s;box-shadow:0 0 30px rgba(14,165,233,0.4);}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 0 55px rgba(14,165,233,0.65);}
+.btn-ghost{padding:0.9rem 2.3rem;background:rgba(14,165,233,0.07);border:1px solid var(--glass-border);border-radius:12px;color:var(--text);font-family:'Cairo',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;backdrop-filter:blur(10px);transition:all 0.3s;}
+.btn-ghost:hover{border-color:var(--blue-bright);background:rgba(14,165,233,0.14);transform:translateY(-4px);}
+.hero-stats{display:flex;gap:3.5rem;margin-top:4rem;flex-wrap:wrap;justify-content:center;}
+.stat{text-align:center;}
+.stat-num{font-family:'Orbitron',sans-serif;font-size:2.1rem;font-weight:700;background:linear-gradient(135deg,var(--blue-bright),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-label{font-size:0.78rem;color:var(--text-muted);letter-spacing:1px;margin-top:0.2rem;}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--text-muted);font-size:0.72rem;letter-spacing:2px;animation:bounce 2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* SECTIONS */
+section{position:relative;z-index:1;padding:6rem 2rem;}
+.section-header{text-align:center;margin-bottom:3.5rem;}
+.section-eyebrow{font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--blue-bright);margin-bottom:0.8rem;}
+.section-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;background:linear-gradient(135deg,var(--text),var(--blue-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.section-line{width:70px;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));margin:1rem auto 0;border-radius:2px;}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1.4rem;max-width:1100px;margin:0 auto;}
+.service-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;backdrop-filter:blur(14px);transition:all 0.4s;}
+.service-card:hover{transform:translateY(-8px);border-color:var(--blue-bright);box-shadow:0 20px 55px rgba(14,165,233,0.2);}
+.service-icon{font-size:2.4rem;margin-bottom:1rem;display:block;}
+.service-card h3{font-family:'Orbitron',sans-serif;font-size:0.95rem;color:var(--blue-bright);margin-bottom:0.6rem;letter-spacing:1px;}
+.service-card p{font-size:0.88rem;color:var(--text-muted);line-height:1.75;}
+.service-tag{display:inline-block;padding:0.25rem 0.8rem;background:rgba(14,165,233,0.1);border:1px solid rgba(56,189,248,0.2);border-radius:50px;font-size:0.68rem;color:var(--blue-bright);margin-top:1rem;letter-spacing:1px;}
+
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;max-width:1100px;margin:0 auto;}
+.gallery-item{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:16/9;border:1px solid var(--glass-border);cursor:pointer;transition:all 0.4s;background:var(--bg2);}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s;}
+.gallery-item:hover{border-color:var(--blue-bright);box-shadow:0 0 30px rgba(14,165,233,0.3);}
+.gallery-item:hover img{transform:scale(1.05);}
+.gallery-overlay{position:absolute;inset:0;background:rgba(3,8,15,0.78);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;backdrop-filter:blur(5px);gap:0.5rem;}
+.gallery-item:hover .gallery-overlay{opacity:1;}
+.g-label{font-size:0.9rem;color:var(--blue-bright);letter-spacing:1px;font-weight:600;}
+.g-sub{font-size:0.75rem;color:var(--text-muted);}
+
+/* ===== PRICING ===== */
+.pricing-tabs{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;}
+.ptab{padding:0.65rem 1.6rem;border-radius:50px;font-family:'Cairo',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-muted);transition:all 0.3s;backdrop-filter:blur(10px);}
+.ptab.active{background:linear-gradient(135deg,var(--blue-deep),var(--blue));border-color:var(--blue);color:white;box-shadow:0 0 20px rgba(14,165,233,0.4);}
+.ptab:hover:not(.active){border-color:var(--blue-bright);color:var(--blue-bright);}
+
+.currency-toggle{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:2.5rem;flex-wrap:wrap;}
+.curr-btn{padding:0.5rem 1.3rem;border-radius:50px;font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-muted);transition:all 0.3s;}
+.curr-btn.active{background:rgba(56,189,248,0.15);border-color:var(--blue-bright);color:var(--blue-bright);}
+.curr-btn:hover:not(.active){border-color:var(--blue-bright);color:var(--blue-bright);}
+
+.pricing-panel{display:none;}
+.pricing-panel.active{display:block;}
+
+/* Discord cards grid */
+.discord-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;}
+
+.price-card{background:rgba(6,13,26,0.8);border:1px solid var(--glass-border);border-radius:24px;padding:2rem 1.8rem 1.8rem;backdrop-filter:blur(15px);transition:all 0.4s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.price-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,165,233,0.04),transparent);pointer-events:none;}
+.price-card:hover{transform:translateY(-8px);border-color:rgba(56,189,248,0.4);box-shadow:0 25px 60px rgba(14,165,233,0.15);}
+
+.price-card.featured{border-color:var(--blue-bright);background:rgba(14,165,233,0.07);box-shadow:0 0 50px rgba(14,165,233,0.15);}
+.price-card.prime-card{border-color:rgba(168,85,247,0.4);background:rgba(88,28,135,0.08);box-shadow:0 0 50px rgba(168,85,247,0.12);}
+.price-card.prime-card:hover{border-color:rgba(168,85,247,0.7);box-shadow:0 25px 60px rgba(168,85,247,0.2);}
+
+.card-badge{position:absolute;top:1rem;left:1rem;padding:0.25rem 0.9rem;border-radius:50px;font-size:0.65rem;letter-spacing:2px;font-weight:700;white-space:nowrap;}
+.badge-popular{background:linear-gradient(135deg,var(--blue-deep),var(--blue));color:white;}
+.badge-prime{background:linear-gradient(135deg,#6d28d9,#a855f7);color:white;}
+.badge-basic{background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.3);color:var(--blue-bright);}
+
+.card-top{margin-top:1.8rem;margin-bottom:1.5rem;}
+.price-tier{font-family:'Orbitron',sans-serif;font-size:0.78rem;color:var(--text-muted);letter-spacing:3px;margin-bottom:0.5rem;text-transform:uppercase;}
+.card-name{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:900;margin-bottom:1rem;}
+.name-basic{background:linear-gradient(135deg,var(--blue-bright),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.name-premium{background:linear-gradient(135deg,#60a5fa,var(--blue-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.name-prime{background:linear-gradient(135deg,#c084fc,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.price-amount-wrap{display:flex;align-items:baseline;gap:0.3rem;}
+.price-amount{font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;color:var(--text);line-height:1;}
+.price-curr{font-size:1.1rem;color:var(--text-muted);font-weight:700;}
+.price-period{font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem;}
+
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(56,189,248,0.2),transparent);margin:1.2rem 0;}
+.prime-divider{background:linear-gradient(90deg,transparent,rgba(168,85,247,0.3),transparent);}
+
+.features-title{font-size:0.72rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.8rem;}
+.price-features{list-style:none;flex:1;}
+.price-features li{padding:0.5rem 0;font-size:0.87rem;color:var(--text-muted);display:flex;align-items:center;gap:0.7rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+.price-features li:last-child{border-bottom:none;}
+.feat-icon{flex-shrink:0;font-size:0.85rem;}
+.feat-icon.blue{color:var(--blue-bright);}
+.feat-icon.purple{color:#c084fc;}
+
+.price-btn{display:block;width:100%;margin-top:1.5rem;padding:0.9rem;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.3s;text-align:center;border:none;}
+.btn-blue{background:linear-gradient(135deg,var(--blue-deep),var(--blue));color:white;box-shadow:0 0 25px rgba(14,165,233,0.3);}
+.btn-blue:hover{box-shadow:0 0 45px rgba(14,165,233,0.55);transform:translateY(-2px);}
+.btn-outline{background:transparent;border:1px solid var(--glass-border)!important;color:var(--text);}
+.btn-outline:hover{border-color:var(--blue-bright)!important;color:var(--blue-bright);}
+.btn-purple{background:linear-gradient(135deg,#6d28d9,#a855f7);color:white;box-shadow:0 0 25px rgba(168,85,247,0.3);}
+.btn-purple:hover{box-shadow:0 0 45px rgba(168,85,247,0.55);transform:translateY(-2px);}
+
+/* Single card panels (thumb/header) */
+.single-card-wrap{display:flex;justify-content:center;}
+.single-card{max-width:400px;width:100%;}
+
+/* ORDER */
+.order-inner{max-width:700px;margin:0 auto;background:var(--glass);border:1px solid var(--glass-border);border-radius:28px;padding:3rem;backdrop-filter:blur(20px);position:relative;overflow:hidden;}
+.order-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue-bright),var(--cyan),transparent);}
+.order-steps{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;}
+.order-step{display:flex;align-items:center;gap:0.6rem;flex:1;min-width:140px;}
+.step-num{width:32px;height:32px;background:linear-gradient(135deg,var(--blue-deep),var(--blue));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;flex-shrink:0;}
+.step-text{font-size:0.85rem;color:var(--text-muted);}
+.order-cta{text-align:center;margin-top:2rem;}
+.order-cta p{color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;line-height:1.7;}
+.discord-btn{display:inline-flex;align-items:center;gap:0.8rem;padding:1rem 2.5rem;border:none;border-radius:14px;color:white;font-family:'Cairo',sans-serif;font-size:1.05rem;font-weight:700;text-decoration:none;cursor:pointer;transition:all 0.3s;letter-spacing:1px;margin:0.5rem;}
+.discord-btn.design{background:linear-gradient(135deg,#3730a3,#5865F2);box-shadow:0 0 35px rgba(88,101,242,0.4);}
+.discord-btn.design:hover{transform:translateY(-4px);box-shadow:0 0 60px rgba(88,101,242,0.6);}
+
+.community-banner{max-width:700px;margin:3rem auto 0;background:rgba(88,101,242,0.06);border:1px solid rgba(88,101,242,0.2);border-radius:20px;padding:1.8rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;backdrop-filter:blur(10px);}
+.community-text h4{font-family:'Orbitron',sans-serif;font-size:0.95rem;color:#a5b4fc;margin-bottom:0.4rem;letter-spacing:1px;}
+.community-text p{font-size:0.85rem;color:var(--text-muted);line-height:1.6;}
+.community-btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.75rem 1.8rem;background:rgba(88,101,242,0.15);border:1px solid rgba(88,101,242,0.3);border-radius:12px;color:#a5b4fc;font-family:'Cairo',sans-serif;font-size:0.9rem;font-weight:700;text-decoration:none;white-space:nowrap;transition:all 0.3s;}
+.community-btn:hover{background:rgba(88,101,242,0.25);border-color:#818cf8;transform:translateY(-2px);}
+
+footer{position:relative;z-index:1;text-align:center;padding:3rem 2rem;border-top:1px solid var(--glass-border);}
+.footer-logo{font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--blue-bright),var(--cyan),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;filter:drop-shadow(0 0 12px rgba(56,189,248,0.5));}
+
+@media(max-width:900px){.discord-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));}}
+@media(max-width:768px){nav{padding:1rem 1.5rem;}.nav-links{gap:1rem;}.order-inner{padding:2rem 1.2rem;}.order-steps{flex-direction:column;}.community-banner{flex-direction:column;text-align:center;}}
+@media(max-width:480px){.nav-links{display:none;}.price-amount{font-size:2.2rem;}}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav>
+  <div class="logo">ZEROFX</div>
+  <ul class="nav-links">
+    <li><a href="#services">الخدمات</a></li>
+    <li><a href="#gallery">الأعمال</a></li>
+    <li><a href="#pricing">الأسعار</a></li>
+    <li><a href="#order">الطلبات</a></li>
+    <li><a href="https://discord.gg/75xnFzQsnw" target="_blank" class="nav-discord">🎨 اطلب تصميم</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="grid-bg"></div>
+  <div class="hero-badge"><span class="dot"></span> متاح للطلبات الآن</div>
+  <h1>ZEROFX</h1>
+  <p class="hero-sub">Creative Design Studio · Zeo Server</p>
+  <p class="hero-desc">تصاميم صور مصغرة يوتيوب رولبوكس، ثامبنيلات بكل أنواعها، هيدرات ديسكورد أنمي موديرن — كل شيء بأسلوب فريد واحترافي.</p>
+  <div class="hero-btns">
+    <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="btn-primary">✦ اطلب تصميمك</a>
+    <a href="#gallery" class="btn-ghost">شاهد أعمالي</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">+50</div><div class="stat-label">تصميم منجز</div></div>
+    <div class="stat"><div class="stat-num">+30</div><div class="stat-label">عميل راضٍ</div></div>
+    <div class="stat"><div class="stat-num">48h</div><div class="stat-label">سرعة التسليم</div></div>
+  </div>
+  <div class="scroll-hint"><span>اكتشف المزيد</span><span>↓</span></div>
+</section>
+
+<section id="services">
+  <div class="section-header">
+    <div class="section-eyebrow">◈ ما أقدمه</div>
+    <h2 class="section-title">الخدمات</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card"><span class="service-icon">🎮</span><h3>ثامبنيلات رولبوكس</h3><p>صور مصغرة يوتيوب مخصصة للمحتوى الرولبوكسي — شخصيات ثلاثية الأبعاد، تأثيرات نار وكهرباء، وألوان مشبعة تجذب المشاهد.</p><span class="service-tag">YouTube · Roblox</span></div>
+    <div class="service-card"><span class="service-icon">🖼️</span><h3>ثامبنيلات متنوعة</h3><p>صور مصغرة لكل أنواع المحتوى — فلوق، ريفيو، تعليمي، ترفيهي، أنمي، جيمينج، وكل ما يخطر على بالك.</p><span class="service-tag">All Types</span></div>
+    <div class="service-card"><span class="service-icon">🌸</span><h3>هيدرات ديسكورد أنمي</h3><p>هيدرات سيرفرات ديسكورد بأسلوب أنمي موديرن — تأثيرات نيون، ألوان فيبرانت، وأجواء تجذب الأعضاء.</p><span class="service-tag">Discord · Anime Modern</span></div>
+    <div class="service-card"><span class="service-icon">⚡</span><h3>باقة ديسكورد كاملة</h3><p>هيدر + بانر + لوجو + بطاقات معلومات + بطاقة أسعار — هوية بصرية متكاملة لسيرفرك.</p><span class="service-tag">Full Server Pack</span></div>
+    <div class="service-card"><span class="service-icon">🎨</span><h3>تصاميم مخصصة</h3><p>أي تصميم تريده — شعارات، بانرات سوشيال ميديا، غلافات، أو أي فكرة عندك.</p><span class="service-tag">Custom Order</span></div>
+    <div class="service-card"><span class="service-icon">💎</span><h3>هوية بصرية كاملة</h3><p>بناء هوية كاملة لقناتك أو سيرفرك — لون موحد، خط ثابت، وأسلوب لا يُنسى.</p><span class="service-tag">Full Branding</span></div>
+  </div>
+</section>
+
+<section id="gallery" style="background:linear-gradient(180deg,transparent,rgba(14,165,233,0.03),transparent)">
+  <div class="section-header">
+    <div class="section-eyebrow">◈ من أعمالي الحقيقية</div>
+    <h2 class="section-title">معرض الأعمال</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="img1.jpg" alt="أسرع طريقة لرفع المستوى" loading="lazy"><div class="gallery-overlay"><span class="g-label">🎮 Roblox Thumbnail</span><span class="g-sub">أسرع طريقة لرفع المستوى</span></div></div>
+    <div class="gallery-item"><img src="img2.jpg" alt="تحديث ايلين أكس" loading="lazy"><div class="gallery-overlay"><span class="g-label">⚡ Roblox Thumbnail</span><span class="g-sub">تحديث ايلين أكس</span></div></div>
+    <div class="gallery-item"><img src="img3.jpg" alt="أفضل ماب لابن العاشرة" loading="lazy"><div class="gallery-overlay"><span class="g-label">🔥 Roblox Thumbnail</span><span class="g-sub">أفضل ماب لابن العاشرة</span></div></div>
+    <div class="gallery-item"><img src="img4.jpg" alt="تحديث الكنترول" loading="lazy"><div class="gallery-overlay"><span class="g-label">💙 Roblox Thumbnail</span><span class="g-sub">تحديث الكنترول</span></div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-header">
+    <div class="section-eyebrow">◈ شفاف ومختلف</div>
+    <h2 class="section-title">الأسعار</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="pricing-tabs">
+    <button class="ptab active" onclick="switchTab('discord',this)">🎮 باقات ديسكورد</button>
+    <button class="ptab" onclick="switchTab('thumb',this)">🖼️ الثامبنيل</button>
+    <button class="ptab" onclick="switchTab('header',this)">🌸 الهيدرات</button>
+  </div>
+
+  <div class="currency-toggle">
+    <span style="font-size:0.82rem;color:var(--text-muted)">العملة :</span>
+    <button class="curr-btn active" onclick="setCurrency('credits',this)">💰 كردت</button>
+    <button class="curr-btn" onclick="setCurrency('robux',this)">🟢 روبوكس</button>
+    <button class="curr-btn" onclick="setCurrency('dollar',this)">💵 دولار</button>
+  </div>
+
+  <!-- DISCORD PANEL -->
+  <div class="pricing-panel active" id="panel-discord">
+    <div class="discord-grid">
+
+      <!-- BASIC / القياسية -->
+      <div class="price-card">
+        <div class="card-badge badge-basic">BASIC</div>
+        <div class="card-top">
+          <div class="price-tier">الحزمة</div>
+          <div class="card-name name-basic">القياسية</div>
+          <div class="price-amount-wrap">
+            <span class="price-amount" id="d-basic-amt">300</span>
+            <span class="price-curr" id="d-basic-curr">m</span>
+          </div>
+          <div class="price-period" id="d-basic-period">كردت ديسكورد</div>
+        </div>
+        <div class="divider"></div>
+        <div class="features-title">المحتويات</div>
+        <ul class="price-features">
+          <li><span class="feat-icon blue">✦</span> افاتار متحرك وثابت</li>
+          <li><span class="feat-icon blue">✦</span> بنر ثابت</li>
+          <li><span class="feat-icon blue">✦</span> 8 انفو</li>
+          <li><span class="feat-icon blue">✦</span> خط وترحيب</li>
+          <li><span class="feat-icon blue">✦</span> 2 لوقو بوتات</li>
+        </ul>
+        <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="price-btn btn-outline">اطلب الآن</a>
+      </div>
+
+      <!-- PREMIUM / البريميوم -->
+      <div class="price-card featured">
+        <div class="card-badge badge-popular">✦ الأكثر طلباً</div>
+        <div class="card-top">
+          <div class="price-tier">الحزمة</div>
+          <div class="card-name name-premium">البريميوم</div>
+          <div class="price-amount-wrap">
+            <span class="price-amount" id="d-pro-amt">625</span>
+            <span class="price-curr" id="d-pro-curr">m</span>
+          </div>
+          <div class="price-period" id="d-pro-period">كردت ديسكورد</div>
+        </div>
+        <div class="divider"></div>
+        <div class="features-title">المحتويات</div>
+        <ul class="price-features">
+          <li><span class="feat-icon blue">✦</span> افاتار متحرك</li>
+          <li><span class="feat-icon blue">✦</span> بنر متحرك</li>
+          <li><span class="feat-icon blue">✦</span> 10 انفو</li>
+          <li><span class="feat-icon blue">✦</span> 6 صور بوتات</li>
+          <li><span class="feat-icon blue">✦</span> خط وترحيب</li>
+        </ul>
+        <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="price-btn btn-blue">اطلب الآن</a>
+      </div>
+
+      <!-- PRIME / الراقي -->
+      <div class="price-card prime-card">
+        <div class="card-badge badge-prime">👑 PRIME</div>
+        <div class="card-top">
+          <div class="price-tier">الحزمة</div>
+          <div class="card-name name-prime">الراقية</div>
+          <div class="price-amount-wrap">
+            <span class="price-amount" id="d-prime-amt">975</span>
+            <span class="price-curr" id="d-prime-curr">m</span>
+          </div>
+          <div class="price-period" id="d-prime-period">كردت ديسكورد</div>
+        </div>
+        <div class="divider prime-divider"></div>
+        <div class="features-title" style="color:#c084fc">المحتويات</div>
+        <ul class="price-features">
+          <li><span class="feat-icon purple">★</span> افاتار متحرك</li>
+          <li><span class="feat-icon purple">★</span> بنر متحرك</li>
+          <li><span class="feat-icon purple">★</span> 25 انفو</li>
+          <li><span class="feat-icon purple">★</span> 10 صور بوتات</li>
+          <li><span class="feat-icon purple">★</span> خط وترحيب</li>
+          <li><span class="feat-icon purple">★</span> برمجة 2 بوت اشتراك</li>
+          <li><span class="feat-icon purple">★</span> صورتين خاصة</li>
+          <li><span class="feat-icon purple">★</span> تصميم كامل للسيرفر</li>
+          <li><span class="feat-icon purple">★</span> رومات & رولات والمزيد</li>
+        </ul>
+        <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="price-btn btn-purple">اطلب الآن</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- THUMB PANEL -->
+  <div class="pricing-panel" id="panel-thumb">
+    <div class="single-card-wrap">
+      <div class="price-card featured single-card">
+        <div class="card-badge badge-popular">🖼️ THUMBNAIL</div>
+        <div class="card-top">
+          <div class="price-tier">سعر</div>
+          <div class="card-name name-premium">الثامبنيل</div>
+          <div class="price-amount-wrap">
+            <span class="price-amount" id="t-amt">100</span>
+            <span class="price-curr" id="t-curr">m</span>
+          </div>
+          <div class="price-period" id="t-period">كردت · للثامبنيل الواحد</div>
+        </div>
+        <div class="divider"></div>
+        <div class="features-title">يشمل</div>
+        <ul class="price-features">
+          <li><span class="feat-icon blue">✦</span> صورة مصغرة يوتيوب</li>
+          <li><span class="feat-icon blue">✦</span> رولبوكس أو أي نوع</li>
+          <li><span class="feat-icon blue">✦</span> تسليم خلال 24 ساعة</li>
+          <li><span class="feat-icon blue">✦</span> PNG جودة عالية</li>
+          <li><span class="feat-icon blue">✦</span> تعديل واحد مجاناً</li>
+        </ul>
+        <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="price-btn btn-blue">اطلب الآن</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER PANEL -->
+  <div class="pricing-panel" id="panel-header">
+    <div class="single-card-wrap">
+      <div class="price-card featured single-card">
+        <div class="card-badge badge-popular">🌸 HEADER</div>
+        <div class="card-top">
+          <div class="price-tier">سعر</div>
+          <div class="card-name name-premium">الهيدر</div>
+          <div class="price-amount-wrap">
+            <span class="price-amount" id="h-amt">200</span>
+            <span class="price-curr" id="h-curr">m</span>
+          </div>
+          <div class="price-period" id="h-period">كردت · للهيدر الواحد</div>
+        </div>
+        <div class="divider"></div>
+        <div class="features-title">يشمل</div>
+        <ul class="price-features">
+          <li><span class="feat-icon blue">✦</span> هيدر ديسكورد أنمي موديرن</li>
+          <li><span class="feat-icon blue">✦</span> تأثيرات نيون وجلو</li>
+          <li><span class="feat-icon blue">✦</span> تسليم خلال 48 ساعة</li>
+          <li><span class="feat-icon blue">✦</span> PNG جودة عالية</li>
+          <li><span class="feat-icon blue">✦</span> تعديل واحد مجاناً</li>
+        </ul>
+        <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="price-btn btn-blue">اطلب الآن</a>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin-top:2.5rem">💬 للاستفسار عن أسعار مخصصة — تواصل معي مباشرة على ديسكورد</p>
+</section>
+
+<!-- ORDER -->
+<section id="order">
+  <div class="section-header">
+    <div class="section-eyebrow">◈ سهل وسريع</div>
+    <h2 class="section-title">كيف تطلب؟</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="order-inner">
+    <div class="order-steps">
+      <div class="order-step"><div class="step-num">1</div><div class="step-text">انضم لسيرفر التصميم</div></div>
+      <div class="order-step"><div class="step-num">2</div><div class="step-text">افتح تذكرة طلب</div></div>
+      <div class="order-step"><div class="step-num">3</div><div class="step-text">وصّف التصميم المطلوب</div></div>
+      <div class="order-step"><div class="step-num">4</div><div class="step-text">استلم تصميمك 🎉</div></div>
+    </div>
+    <div class="order-cta">
+      <p>جميع الطلبات تتم عبر <strong style="color:var(--blue-bright)">سيرفر التصميم</strong> على ديسكورد.<br>انضم وافتح تذكرة وأنا هرد عليك في أقرب وقت!</p>
+      <a href="https://discord.gg/75xnFzQsnw" target="_blank" class="discord-btn design">
+        <svg width="20" height="20" viewBox="0 0 71 55" fill="white"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.4a40 40 0 0 0-1.8 3.6 54 54 0 0 0-16.4 0A38.7 38.7 0 0 0 25.5.4 58.4 58.4 0 0 0 10.9 5C1.6 18.9-1 32.4.3 45.7a59 59 0 0 0 18 9.1 44 44 0 0 0 3.8-6.2 38.3 38.3 0 0 1-6-2.9l1.5-1.1a42 42 0 0 0 36 0l1.5 1.1a38.4 38.4 0 0 1-6 2.9 44 44 0 0 0 3.8 6.2 58.7 58.7 0 0 0 18-9.1C72.5 30.1 68.5 16.7 60.1 4.9ZM23.9 37.7c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.5 0 6.4 3.2 6.4 7.2s-2.9 7.2-6.4 7.2Zm23.2 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.5 0 6.4 3.2 6.4 7.2s-2.9 7.2-6.4 7.2Z"/></svg>
+        سيرفر التصميم — اطلب الآن
+      </a>
+    </div>
+  </div>
+  <div class="community-banner">
+    <div class="community-text">
+      <h4>🌐 سيرفر Zeo — الكوميونتي</h4>
+      <p>انضم لمجتمع Zeo لتتابع آخر الأعمال والعروض والمسابقات. اختياري — مش ضروري للطلب.</p>
+    </div>
+    <a href="https://discord.gg/zeo-shop-1053313133533474856" target="_blank" class="community-btn">
+      <svg width="18" height="18" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.4a40 40 0 0 0-1.8 3.6 54 54 0 0 0-16.4 0A38.7 38.7 0 0 0 25.5.4 58.4 58.4 0 0 0 10.9 5C1.6 18.9-1 32.4.3 45.7a59 59 0 0 0 18 9.1 44 44 0 0 0 3.8-6.2 38.3 38.3 0 0 1-6-2.9l1.5-1.1a42 42 0 0 0 36 0l1.5 1.1a38.4 38.4 0 0 1-6 2.9 44 44 0 0 0 3.8 6.2 58.7 58.7 0 0 0 18-9.1C72.5 30.1 68.5 16.7 60.1 4.9ZM23.9 37.7c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.5 0 6.4 3.2 6.4 7.2s-2.9 7.2-6.4 7.2Zm23.2 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.5 0 6.4 3.2 6.4 7.2s-2.9 7.2-6.4 7.2Z"/></svg>
+      انضم اختياري
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">ZEROFX</div>
+  <p style="margin-bottom:0.5rem;color:var(--text-muted)">✦ Designer · Zeo Server · رولبوكس · أنمي موديرن</p>
+  <p style="color:var(--text-muted);font-size:0.8rem">جميع الحقوق محفوظة © 2025 Zerofx</p>
+</footer>
+
+<script>
+const priceData = {
+  discord:{
+    basic: {credits:['300','m','كردت ديسكورد'], robux:['400','R','روبوكس'], dollar:['5','$','دولار']},
+    pro:   {credits:['625','m','كردت ديسكورد'], robux:['1200','R','روبوكس'], dollar:['10','$','دولار']},
+    prime: {credits:['975','m','كردت ديسكورد'], robux:['3000','R','روبوكس'], dollar:['25','$','دولار']}
+  },
+  thumb:  {credits:['100','m','كردت · للثامبنيل الواحد'], robux:['325','R','روبوكس · للثامبنيل الواحد'], dollar:['3','$','دولار · للثامبنيل الواحد']},
+  header: {credits:['200','m','كردت · للهيدر الواحد'], robux:['500','R','روبوكس · للهيدر الواحد'], dollar:['5','$','دولار · للهيدر الواحد']}
+};
+
+let curr = 'credits';
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.pricing-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+function setCurrency(c, btn) {
+  curr = c;
+  document.querySelectorAll('.curr-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updatePrices();
+}
+
+function set(id, vals) {
+  const el = document.getElementById(id);
+  if(el) el.textContent = vals[0];
+}
+
+function updatePrices() {
+  const d = priceData.discord;
+  ['basic','pro','prime'].forEach((k,i)=>{
+    const ids = ['basic','pro','prime'];
+    const v = d[k][curr];
+    set('d-'+ids[i]+'-amt', [v[0]]);
+    set('d-'+ids[i]+'-curr', [v[1]]);
+    set('d-'+ids[i]+'-period', [v[2]]);
+  });
+  const t = priceData.thumb[curr];
+  set('t-amt',[t[0]]); set('t-curr',[t[1]]); set('t-period',[t[2]]);
+  const h = priceData.header[curr];
+  set('h-amt',[h[0]]); set('h-curr',[h[1]]); set('h-period',[h[2]]);
+}
+
+// Nav highlight
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-200)cur=s.id;});
+  document.querySelectorAll('.nav-links a:not(.nav-discord)').forEach(a=>{
+    a.style.color=a.getAttribute('href')==='#'+cur?'var(--blue-bright)':'';
+  });
+});
+</script>
+</body>
+</html>
